@@ -1,0 +1,14 @@
+.venv
+.env
+dist/
+build/
+.vscode/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*/__pycache__/
+*.pyc
+docs/_build/
+docs/source/_static/
+docs/source/_templates/
+docs/source/_autosummary/
