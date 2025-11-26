@@ -1,6 +1,14 @@
 import pytest
-from video_generation_analysis.database_handler.query_builder import QueryBuilder, QueryType
-from video_generation_analysis.database_handler.schema import OrderByType, WhereComparison, WhereLogical
+
+from video_generation_analysis.database_handler.query_builder import (
+    QueryBuilder,
+    QueryType,
+)
+from video_generation_analysis.database_handler.schema import (
+    OrderByType,
+    WhereComparison,
+    WhereLogical,
+)
 
 
 def test_select_columns_list():
@@ -60,11 +68,7 @@ def test_where_compare_with_or():
 
 
 def test_order_by_ascending():
-    qb = (
-        QueryBuilder()
-        .select_columns("*")
-        .order_by("age", OrderByType.ASCENDING)
-    )
+    qb = QueryBuilder().select_columns("*").order_by("age", OrderByType.ASCENDING)
     query, params = qb.build("users", QueryType.READ)
 
     assert query == "SELECT * FROM users ORDER BY age ASC"
@@ -72,11 +76,7 @@ def test_order_by_ascending():
 
 
 def test_order_by_descending():
-    qb = (
-        QueryBuilder()
-        .select_columns("*")
-        .order_by("name", OrderByType.DESCENDING)
-    )
+    qb = QueryBuilder().select_columns("*").order_by("name", OrderByType.DESCENDING)
     query, params = qb.build("users", QueryType.READ)
 
     assert query == "SELECT * FROM users ORDER BY name DESC"

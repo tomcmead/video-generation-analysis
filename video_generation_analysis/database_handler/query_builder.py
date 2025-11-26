@@ -1,13 +1,21 @@
-from video_generation_analysis.database_handler.schema import OrderByType, WhereComparison, WhereLogical
-from typing import Any, List, Tuple
 from enum import Enum, auto
+from typing import Any, List, Tuple
+
+from video_generation_analysis.database_handler.schema import (
+    OrderByType,
+    WhereComparison,
+    WhereLogical,
+)
+
 
 class QueryType(Enum):
     READ = auto()
     DELETE = auto()
 
+
 class QueryBuilder:
-    """Builds SQL queries for SELECT and DELETE operations with WHERE and ORDER BY clauses"""
+    """Build SQL queries SELECT DELETE operations with WHERE and ORDER BY clauses"""
+
     def __init__(self):
         self._columns = "*"
         self._where_clauses = []
@@ -31,11 +39,15 @@ class QueryBuilder:
 
     def where_logical(self, logical: WhereLogical):
         """Add logical operator (AND/OR) to WHERE clause"""
-        if self._where_clauses and self._where_clauses[-1] != WhereLogical.AND.value and self._where_clauses[-1] != WhereLogical.OR.value:
+        if (
+            self._where_clauses
+            and self._where_clauses[-1] != WhereLogical.AND.value
+            and self._where_clauses[-1] != WhereLogical.OR.value
+        ):
             self._where_clauses.append(logical.value)
         return self
 
-    def order_by(self, column: str, direction: OrderByType=OrderByType.ASCENDING):
+    def order_by(self, column: str, direction: OrderByType = OrderByType.ASCENDING):
         """Add ORDER BY clause to query"""
         self._order_clause = f" ORDER BY {column} {direction.value}"
         return self
@@ -52,9 +64,15 @@ class QueryBuilder:
         for idx, where_clause in enumerate(self._where_clauses):
             if idx == 0:
                 query += " WHERE"
-            if idx % 2 == 0 and where_clause not in (WhereLogical.AND.value, WhereLogical.OR.value):
+            if idx % 2 == 0 and where_clause not in (
+                WhereLogical.AND.value,
+                WhereLogical.OR.value,
+            ):
                 query += f" {where_clause}"
-            elif idx % 2 == 1 and where_clause in (WhereLogical.AND.value, WhereLogical.OR.value):
+            elif idx % 2 == 1 and where_clause in (
+                WhereLogical.AND.value,
+                WhereLogical.OR.value,
+            ):
                 query += f" {where_clause}"
             else:
                 raise ValueError("Invalid WHERE clause structure")

@@ -30,7 +30,7 @@ class DatabaseHandler:
         self._create_table(self._db_schema)
         return self
 
-    def __exit__(self, exc_type, exc_val) -> bool:
+    def __exit__(self, exc_type, exc_val, traceback) -> bool:
         """Context Manager commit/rollback & close connection on 'with' block exit."""
         try:
             if exc_type is None:
