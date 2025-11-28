@@ -1,11 +1,9 @@
 import pytest
 
 from video_generation_analysis.database_handler.query_builder import (
+    OrderByType,
     QueryBuilder,
     QueryType,
-)
-from video_generation_analysis.database_handler.schema import (
-    OrderByType,
     WhereComparison,
     WhereLogical,
 )

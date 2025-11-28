@@ -4,11 +4,11 @@ import unittest
 from datetime import datetime
 
 from video_generation_analysis.database_handler.database_handler import DatabaseHandler
-from video_generation_analysis.database_handler.query_builder import QueryBuilder
-from video_generation_analysis.database_handler.schema import (
-    VideoEngagementRecord,
+from video_generation_analysis.database_handler.query_builder import (
+    QueryBuilder,
     WhereComparison,
 )
+from video_generation_analysis.database_handler.schema import VideoEngagementRecord
 
 
 class TestDatabaseHandler(unittest.TestCase):

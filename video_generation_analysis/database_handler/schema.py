@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from datetime import datetime
-from enum import Enum
 from typing import List
 
 
@@ -21,22 +20,3 @@ SQLITE_TYPE_MAP = {
     "float": "REAL",
     "bool": "INTEGER",
 }
-
-
-class OrderByType(Enum):
-    ASCENDING = "ASC"
-    DESCENDING = "DESC"
-
-
-class WhereComparison(Enum):
-    EQUAL = "="
-    NOT_EQUAL = "!="
-    GREATER_THAN = ">"
-    GREATER_THAN_EQUAL = ">="
-    LESS_THAN = "<"
-    LESS_THAN_EQUAL = "<="
-
-
-class WhereLogical(Enum):
-    AND = "AND"
-    OR = "OR"

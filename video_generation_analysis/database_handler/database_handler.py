@@ -13,7 +13,7 @@ from video_generation_analysis.database_handler.schema import SQLITE_TYPE_MAP
 
 
 class DatabaseHandler:
-    """Handles all database operations for a specific SQLite file."""
+    """Context Manager handles all database operations for a specific SQLite file."""
 
     def __init__(self, db_path: str, db_schema: Type) -> None:
         self._logger: logging.Logger = logging.getLogger(__name__)

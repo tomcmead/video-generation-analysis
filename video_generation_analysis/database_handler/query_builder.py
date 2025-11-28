@@ -1,11 +1,24 @@
 from enum import Enum, auto
 from typing import Any, List, Tuple
 
-from video_generation_analysis.database_handler.schema import (
-    OrderByType,
-    WhereComparison,
-    WhereLogical,
-)
+
+class OrderByType(Enum):
+    ASCENDING = "ASC"
+    DESCENDING = "DESC"
+
+
+class WhereComparison(Enum):
+    EQUAL = "="
+    NOT_EQUAL = "!="
+    GREATER_THAN = ">"
+    GREATER_THAN_EQUAL = ">="
+    LESS_THAN = "<"
+    LESS_THAN_EQUAL = "<="
+
+
+class WhereLogical(Enum):
+    AND = "AND"
+    OR = "OR"
 
 
 class QueryType(Enum):
