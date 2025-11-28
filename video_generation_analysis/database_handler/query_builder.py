@@ -34,6 +34,7 @@ class QueryBuilder:
         self._where_clauses = []
         self._params = []
         self._order_clause = ""
+        self._limit_clause = ""
 
     def select_columns(self, columns: List[str] | Tuple[str] | str):
         """Specify columns to select in the query"""
@@ -65,6 +66,11 @@ class QueryBuilder:
         self._order_clause = f" ORDER BY {column} {direction.value}"
         return self
 
+    def limit(self, count: int):
+        """Add LIMIT clause to query"""
+        self._limit_clause = f" LIMIT {count}"
+        return self
+
     def build(self, table: str, query_type: QueryType) -> Tuple[str, List[Any]]:
         """Construct final SQL query and return it with parameters"""
         if query_type == QueryType.READ:
@@ -91,4 +97,5 @@ class QueryBuilder:
                 raise ValueError("Invalid WHERE clause structure")
 
         query += self._order_clause
+        query += self._limit_clause
         return query, self._params

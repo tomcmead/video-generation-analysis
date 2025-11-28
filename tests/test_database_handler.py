@@ -126,8 +126,13 @@ class TestDatabaseHandler(unittest.TestCase):
         with self.handler as db:
             db.create(self.TEST_RECORD_A)
             db.create(self.TEST_RECORD_B)
+            db.create(self.TEST_RECORD_DELETE)
 
-            qb = QueryBuilder().where_compare("views", WhereComparison.GREATER_THAN, 0)
+            qb = (
+                QueryBuilder()
+                .where_compare("views", WhereComparison.GREATER_THAN, 0)
+                .limit(2)
+            )
             results = db.read(qb)  # views > 0
 
         if results is None:
