@@ -138,8 +138,8 @@ class TestDatabaseHandler(unittest.TestCase):
         if results is None:
             self.fail("Read returned None")
         self.assertEqual(len(results), 2)
-        self.assertEqual(results[0][2], self.TEST_RECORD_A.title)
-        self.assertEqual(results[1][2], self.TEST_RECORD_B.title)
+        self.assertEqual(results[0].title, self.TEST_RECORD_A.title)
+        self.assertEqual(results[1].title, self.TEST_RECORD_B.title)
 
     def test_update(self):
         with self.handler as db:
@@ -150,7 +150,7 @@ class TestDatabaseHandler(unittest.TestCase):
             if result is None:
                 self.fail("Read returned None")
 
-            record_id = result[0][0]
+            record_id = result[0].id
             db.update(record_id, {"title": "Updated Title", "views": 9999})
 
             qb = QueryBuilder().select_columns(["id", "title", "views"])
@@ -158,8 +158,8 @@ class TestDatabaseHandler(unittest.TestCase):
             if updated_results is None:
                 self.fail("Read returned None")
 
-            self.assertEqual(updated_results[0][1], "Updated Title")
-            self.assertEqual(updated_results[0][2], str(9999))
+            self.assertEqual(updated_results[0].title, "Updated Title")
+            self.assertEqual(updated_results[0].views, str(9999))
 
     def test_delete(self):
         """Test the delete method logic."""
@@ -180,7 +180,7 @@ class TestDatabaseHandler(unittest.TestCase):
             if remaining_results is None:
                 self.fail("Read returned None")
             self.assertEqual(len(remaining_results), 1)
-            self.assertEqual(remaining_results[0][1], self.TEST_RECORD_B.title)
+            self.assertEqual(remaining_results[0].title, self.TEST_RECORD_B.title)
 
     def test_create_with_non_dataclass_raises_type_error(self):
         with self.handler as db:

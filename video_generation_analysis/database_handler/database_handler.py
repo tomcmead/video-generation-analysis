@@ -26,6 +26,7 @@ class DatabaseHandler:
     def __enter__(self) -> "DatabaseHandler":
         """Context Manager establish db connection & cursor entering 'with' block."""
         self._conn = sqlite3.connect(self._db_path)
+        self._conn.row_factory = sqlite3.Row
         self._cursor = self._conn.cursor()
         self._create_table(self._db_schema)
         return self
@@ -64,10 +65,13 @@ class DatabaseHandler:
         sql = f"INSERT INTO {self._table_name} ({columns}) VALUES ({placeholders})"
         self._execute(sql, values)
 
-    def read(self, criteria: QueryBuilder) -> Optional[list[Any]]:
+    def read(self, criteria: QueryBuilder) -> list[Type]:
         """Reads records matching criteria"""
         sql, params = criteria.build(self._table_name, QueryType.READ)
-        return self._execute(sql, params)
+        record_list = self._execute(sql, params)
+        if record_list is None:
+            return []
+        return self._record_list_to_dataclass(record_list)
 
     def update(self, record_id: int, updates: Dict[str, Any]) -> None:
         """Update existing record by ID"""
@@ -124,3 +128,11 @@ class DatabaseHandler:
         columns_str = ", ".join(columns)
         sql = f"CREATE TABLE IF NOT EXISTS {self._table_name} ({columns_str})"
         self._execute(sql)
+
+    def _record_list_to_dataclass(self, record_list: list[Any]) -> list[Type]:
+        """Convert dict of DB records to list of dataclass instances."""
+        result = []
+        for record in record_list:
+            record_dict = dict(record)
+            result.append(self._db_schema(**record_dict))
+        return result

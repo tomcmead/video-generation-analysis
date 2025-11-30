@@ -1,17 +1,18 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
-from typing import List
+from typing import Optional
 
 
 @dataclass
 class VideoEngagementRecord:
-    datetime_publish: datetime
-    title: str
-    description: str
-    views: int
-    likes: int
-    comments: int
-    keywords: List[str]
+    id: Optional[int] = None
+    datetime_publish: Optional[datetime] = None
+    title: str = ""
+    description: str = ""
+    views: int = -1
+    likes: int = -1
+    comments: int = -1
+    keywords: list[str] = field(default_factory=list)
 
 
 SQLITE_TYPE_MAP = {
