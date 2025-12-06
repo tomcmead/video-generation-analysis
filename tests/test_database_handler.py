@@ -15,7 +15,6 @@ class TestDatabaseHandler(unittest.TestCase):
     DB_PATH = "test_temp_db.sqlite"
     TABLE_NAME = VideoEngagementRecord.__name__.lower() + "s"
     TEST_DATETIME = datetime(2025, 11, 25, 12, 0, 0)
-    TEST_DATETIME_ISO = "2025-11-25T12:00:00"
 
     TEST_RECORD_A = VideoEngagementRecord(
         datetime_publish=TEST_DATETIME,
@@ -140,6 +139,11 @@ class TestDatabaseHandler(unittest.TestCase):
         self.assertEqual(len(results), 2)
         self.assertEqual(results[0].title, self.TEST_RECORD_A.title)
         self.assertEqual(results[1].title, self.TEST_RECORD_B.title)
+        self.assertEqual(
+            results[0].datetime_publish, self.TEST_RECORD_B.datetime_publish.isoformat()
+            )
+        for kw_result, kw_db in zip(results[0].keywords, self.TEST_RECORD_A.keywords):
+            self.assertEqual(kw_result, kw_db)
 
     def test_update(self):
         with self.handler as db:

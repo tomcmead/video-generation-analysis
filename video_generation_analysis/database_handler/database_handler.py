@@ -3,7 +3,7 @@ import logging
 import sqlite3
 from dataclasses import fields, is_dataclass
 from datetime import datetime
-from typing import Any, Dict, Optional, Type
+from typing import Any, Dict, Optional, Type, get_origin
 
 from video_generation_analysis.database_handler.query_builder import (
     QueryBuilder,
@@ -131,8 +131,19 @@ class DatabaseHandler:
 
     def _record_list_to_dataclass(self, record_list: list[Any]) -> list[Type]:
         """Convert dict of DB records to list of dataclass instances."""
-        result = []
+        results = []
         for record in record_list:
             record_dict = dict(record)
-            result.append(self._db_schema(**record_dict))
-        return result
+            results.append(self._db_schema(**record_dict))
+
+        for result in results:
+            for field in fields(self._db_schema):
+                current_value = getattr(result, field.name)
+                if get_origin(field.type) is list and isinstance(current_value, str):
+                    converted_list = json.loads(current_value)
+                    setattr(
+                        result,
+                        field.name,
+                        converted_list,
+                    )
+        return results
