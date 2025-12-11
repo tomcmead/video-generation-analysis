@@ -8,6 +8,7 @@ from video_generation_analysis.video_generator.keyword_context import KeywordCon
 
 class KeywordGensimStrategy(KeywordContext):
     """Generates new keywords using Gensim word2vec model similarity"""
+
     def __init__(self):
         self._logger: logging.Logger = logging.getLogger(__name__)
         self._model = None
@@ -17,9 +18,8 @@ class KeywordGensimStrategy(KeywordContext):
             self._logger.error(f"Failed to load gensim model: {e}")
 
     def generate_keywords(
-            self, current_keywords: list[str],
-            num_new_keywords: int
-            ) -> list[str]:
+        self, current_keywords: list[str], num_new_keywords: int
+    ) -> list[str]:
         """Generates new keywords based on current keywords using Gensim model"""
         if self._model is None:
             return []

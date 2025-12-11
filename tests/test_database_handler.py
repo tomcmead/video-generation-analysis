@@ -141,7 +141,7 @@ class TestDatabaseHandler(unittest.TestCase):
         self.assertEqual(results[1].title, self.TEST_RECORD_B.title)
         self.assertEqual(
             results[0].datetime_publish, self.TEST_RECORD_B.datetime_publish.isoformat()
-            )
+        )
         for kw_result, kw_db in zip(results[0].keywords, self.TEST_RECORD_A.keywords):
             self.assertEqual(kw_result, kw_db)
 

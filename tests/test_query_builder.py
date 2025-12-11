@@ -80,6 +80,7 @@ def test_order_by_descending():
     assert query == "SELECT * FROM users ORDER BY name DESC"
     assert params == []
 
+
 def test_limit():
     qb = QueryBuilder().select_columns("*").limit(10)
     query, params = qb.build("users", QueryType.READ)
