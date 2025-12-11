@@ -3,13 +3,13 @@ from video_generation_analysis.database_handler.query_builder import (
     OrderByType,
     QueryBuilder,
 )
-from video_generation_analysis.video_generator.keyword_context import KeywordContext
+from video_generation_analysis.video_generator.keyword_strategy import KeywordStrategy
 
 
 class KeywordGenerator:
     """Generates new keywords based on top engagement keywords in database."""
 
-    def __init__(self, db_handler: DatabaseHandler, keyword_strategy: KeywordContext):
+    def __init__(self, db_handler: DatabaseHandler, keyword_strategy: KeywordStrategy):
         self._db_handler = db_handler
         self._keyword_strategy = keyword_strategy
 

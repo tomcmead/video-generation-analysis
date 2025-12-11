@@ -3,10 +3,10 @@ import logging
 import gensim.downloader as api
 
 from video_generation_analysis.config import GENSIM_MODEL_NAME
-from video_generation_analysis.video_generator.keyword_context import KeywordContext
+from video_generation_analysis.video_generator.keyword_strategy import KeywordStrategy
 
 
-class KeywordGensimStrategy(KeywordContext):
+class KeywordGensimStrategy(KeywordStrategy):
     """Generates new keywords using Gensim word2vec model similarity"""
 
     def __init__(self):

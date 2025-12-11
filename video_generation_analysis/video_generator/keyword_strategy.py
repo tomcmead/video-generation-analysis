@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class KeywordContext(ABC):
+class KeywordStrategy(ABC):
     """Strategy interface for keyword generation algorithm."""
 
     @abstractmethod
