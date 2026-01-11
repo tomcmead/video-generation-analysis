@@ -2,6 +2,7 @@ import asyncio
 import logging
 import os
 from contextlib import asynccontextmanager
+from pathlib import Path
 from typing import Optional
 from uuid import uuid4
 
@@ -44,14 +45,20 @@ class VideoGenerator:
             if aclient:
                 await aclient.aclose()
 
-    def create_video(self, prompt: str) -> Optional[str]:
+    def create_video(self, prompt: str) -> Optional[Path]:
         """Generate video, wait for result and download it locally"""
         try:
             video_path = asyncio.run(self._await_create_video(prompt))
-            return video_path
+            if video_path:
+                return Path(video_path)
         except Exception as e:
             self._logger.error(f"Unhandled error in synchronous wrapper: {e}")
-            return None
+        return None
+
+    def delete_local_video(self, video_path: Path) -> None:
+        """Delete local video file"""
+        if video_path.is_file():
+            video_path.unlink()
 
     async def _poll_for_completion(
         self, aclient: Client.aio, operation: Operation
