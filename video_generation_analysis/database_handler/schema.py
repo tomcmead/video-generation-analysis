@@ -9,6 +9,7 @@ class VideoEngagementRecord:
     datetime_publish: Optional[datetime] = None
     title: str = ""
     description: str = ""
+    urls: list[str] = field(default_factory=list)
     views: int = -1
     likes: int = -1
     comments: int = -1
