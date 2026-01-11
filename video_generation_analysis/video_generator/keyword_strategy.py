@@ -5,8 +5,6 @@ class KeywordStrategy(ABC):
     """Strategy interface for keyword generation algorithm."""
 
     @abstractmethod
-    def generate_keywords(
-        self, current_keywords: list[str], num_new_keywords: int
-    ) -> list[str]:
+    def generate(self, keywords: list[str], min_length: int, max_length: int) -> str:
         """generates new keywords based on current keywords provided."""
         pass

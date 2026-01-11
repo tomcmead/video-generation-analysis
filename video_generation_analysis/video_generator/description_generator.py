@@ -1,3 +1,9 @@
+from video_generation_analysis.config import (
+    DESCRIPTION_MAX_LENGTH,
+    DESCRIPTION_MIN_LENGTH,
+    TITLE_MAX_LENGTH,
+    TITLE_MIN_LENGTH,
+)
 from video_generation_analysis.database_handler.database_handler import DatabaseHandler
 from video_generation_analysis.database_handler.query_builder import (
     OrderByType,
@@ -6,19 +12,42 @@ from video_generation_analysis.database_handler.query_builder import (
 from video_generation_analysis.video_generator.keyword_strategy import KeywordStrategy
 
 
-class KeywordGenerator:
-    """Generates new keywords based on top engagement keywords in database."""
+class DescriptionGenerator:
+    """Generates new description based on top engagement keywords in database."""
 
-    def __init__(self, db_handler: DatabaseHandler, keyword_strategy: KeywordStrategy):
+    def __init__(
+        self,
+        db_handler: DatabaseHandler,
+        keyword_strategy: KeywordStrategy,
+        description_strategy: KeywordStrategy,
+    ):
         self._db_handler = db_handler
         self._keyword_strategy = keyword_strategy
+        self._description_strategy = description_strategy
 
-    def generate_keywords(
+    def generate_description(
         self, num_new_keywords, num_top_videos: int = 10
-    ) -> list[str]:
+    ) -> tuple[str, str, list[str]]:
         """Gets top keywords from db, generates new keywords by strategy algorithm."""
         top_keywords = self.get_top_keywords(num_top_videos=num_top_videos)
-        return self._keyword_strategy.generate_keywords(top_keywords, num_new_keywords)
+
+        keywords = self._keyword_strategy.generate(
+            keywords=top_keywords,
+            max_length=num_new_keywords,
+            min_length=num_new_keywords,
+        ).split()
+        title = self._description_strategy.generate(
+            keywords=keywords,
+            max_length=TITLE_MAX_LENGTH,
+            min_length=TITLE_MIN_LENGTH,
+        )
+        description = self._description_strategy.generate(
+            keywords=keywords,
+            max_length=DESCRIPTION_MAX_LENGTH,
+            min_length=DESCRIPTION_MIN_LENGTH,
+        )
+
+        return title, description, keywords
 
     def get_top_keywords(self, num_top_videos: int) -> list[str]:
         """Retrieves top keywords from database based on engagement metrics."""

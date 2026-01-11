@@ -22,6 +22,7 @@ def test_video_generator_invalid(monkeypatch):
     with pytest.raises(ValueError):
         VideoGenerator()
 
+
 def test_delete_local_video():
     vg = VideoGenerator()
     temp_video_path = Path("test_video.mp4")

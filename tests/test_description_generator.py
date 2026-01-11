@@ -4,17 +4,23 @@ from datetime import datetime
 
 from video_generation_analysis.database_handler.database_handler import DatabaseHandler
 from video_generation_analysis.database_handler.schema import VideoEngagementRecord
-from video_generation_analysis.video_generator.keyword_generator import KeywordGenerator
+from video_generation_analysis.video_generator.description_generator import (
+    DescriptionGenerator,
+)
 from video_generation_analysis.video_generator.keyword_gensim_strategy import (
     KeywordGensimStrategy,
 )
+from video_generation_analysis.video_generator.keyword_huggingface_strategy import (
+    KeywordHuggingFaceStrategy,
+)
 
 
-class TestKeywordGenerator(unittest.TestCase):
+class TestDescriptionGenerator(unittest.TestCase):
     DB_PATH = "test_temp_db.sqlite"
     TABLE_NAME = VideoEngagementRecord.__name__.lower() + "s"
     TEST_DATETIME = datetime(2025, 11, 25, 12, 0, 0)
     KEYWORD_STRATEGY = KeywordGensimStrategy()
+    DESCRIPTION_STRATEGY = KeywordHuggingFaceStrategy()
 
     TEST_RECORD_A = VideoEngagementRecord(
         datetime_publish=TEST_DATETIME,
@@ -48,8 +54,10 @@ class TestKeywordGenerator(unittest.TestCase):
 
     def test_get_top_keywords(self):
         expected_keywords = ["python", "maximum"]
-        keyword_generator = KeywordGenerator(
-            db_handler=self._db_handler, keyword_strategy=self.KEYWORD_STRATEGY
+        keyword_generator = DescriptionGenerator(
+            db_handler=self._db_handler,
+            keyword_strategy=self.KEYWORD_STRATEGY,
+            description_strategy=self.DESCRIPTION_STRATEGY,
         )
 
         result_keywords = keyword_generator.get_top_keywords(num_top_videos=2)
@@ -57,13 +65,18 @@ class TestKeywordGenerator(unittest.TestCase):
         self.assertEqual(result_keywords, expected_keywords)
 
     def test_generate_keywords(self):
-        keyword_generator = KeywordGenerator(
-            db_handler=self._db_handler, keyword_strategy=self.KEYWORD_STRATEGY
+        keyword_generator = DescriptionGenerator(
+            db_handler=self._db_handler,
+            keyword_strategy=self.KEYWORD_STRATEGY,
+            description_strategy=self.DESCRIPTION_STRATEGY,
         )
 
-        result_keywords = keyword_generator.generate_keywords(
+        title, description, keywords = keyword_generator.generate_description(
             num_new_keywords=5, num_top_videos=2
         )
 
-        assert len(result_keywords) == 5
-        assert isinstance(result_keywords, list)
+        assert len(keywords) == 5
+        assert isinstance(keywords, list)
+        assert isinstance(title, str)
+        assert isinstance(description, str)
+        assert description > title
