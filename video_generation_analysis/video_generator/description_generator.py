@@ -26,10 +26,13 @@ class DescriptionGenerator:
         self._description_strategy = description_strategy
 
     def generate_description(
-        self, num_new_keywords, num_top_videos: int = 10
+        self, num_new_keywords, num_top_videos: int = 10, prompt: str = ""
     ) -> tuple[str, str, list[str]]:
         """Gets top keywords from db, generates new keywords by strategy algorithm."""
-        top_keywords = self.get_top_keywords(num_top_videos=num_top_videos)
+        if prompt:
+            top_keywords = prompt.split()
+        else:
+            top_keywords = self.get_top_keywords(num_top_videos=num_top_videos)
 
         keywords = self._keyword_strategy.generate(
             keywords=top_keywords,

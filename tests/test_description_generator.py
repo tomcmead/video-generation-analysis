@@ -54,28 +54,45 @@ class TestDescriptionGenerator(unittest.TestCase):
 
     def test_get_top_keywords(self):
         expected_keywords = ["python", "maximum"]
-        keyword_generator = DescriptionGenerator(
+        description_generator = DescriptionGenerator(
             db_handler=self._db_handler,
             keyword_strategy=self.KEYWORD_STRATEGY,
             description_strategy=self.DESCRIPTION_STRATEGY,
         )
 
-        result_keywords = keyword_generator.get_top_keywords(num_top_videos=2)
+        result_keywords = description_generator.get_top_keywords(num_top_videos=2)
 
         self.assertEqual(result_keywords, expected_keywords)
 
-    def test_generate_keywords(self):
-        keyword_generator = DescriptionGenerator(
+    def test_generate_description_no_prompt(self):
+        description_generator = DescriptionGenerator(
             db_handler=self._db_handler,
             keyword_strategy=self.KEYWORD_STRATEGY,
             description_strategy=self.DESCRIPTION_STRATEGY,
         )
 
-        title, description, keywords = keyword_generator.generate_description(
+        title, description, keywords = description_generator.generate_description(
             num_new_keywords=5, num_top_videos=2
         )
 
         assert len(keywords) == 5
+        assert isinstance(keywords, list)
+        assert isinstance(title, str)
+        assert isinstance(description, str)
+        assert description > title
+
+    def test_generate_description_with_prompt(self):
+        description_generator = DescriptionGenerator(
+            db_handler=self._db_handler,
+            keyword_strategy=self.KEYWORD_STRATEGY,
+            description_strategy=self.DESCRIPTION_STRATEGY,
+        )
+
+        title, description, keywords = description_generator.generate_description(
+            num_new_keywords=3, num_top_videos=2, prompt="Video Testing Fun Games Ideas"
+        )
+
+        assert len(keywords) == 3
         assert isinstance(keywords, list)
         assert isinstance(title, str)
         assert isinstance(description, str)
