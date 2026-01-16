@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from video_generation_analysis.video_platforms_handler.platform_api_bridge import (
     PlatformApiBridge,
 )
@@ -10,8 +12,8 @@ class VideoPlatformsFacade:
         self._publishers = publishers
 
     def publish_to_all(
-        self, file_path: str, title: str, description: str, tags: list[str]
-    ):
+        self, file_path: Path, title: str, description: str, tags: list[str]
+    ) -> list[str]:
         """
         Provides a simple interface to publish to all configured platforms.
         """
@@ -20,6 +22,7 @@ class VideoPlatformsFacade:
         for publisher in self._publishers:
             print(f"--- Publishing via {publisher.__class__.__name__} ---")
             url = publisher.publish_video(file_path, title, description, tags)
-            urls.append(url)
+            if url:
+                urls.append(url)
         print("Publish sequence complete.")
         return urls

@@ -1,5 +1,6 @@
 import logging
 import os
+from pathlib import Path
 from typing import Optional
 
 from dotenv import load_dotenv
@@ -43,12 +44,12 @@ class YouTubeApiBridge(PlatformApiBridge):
         )
 
     def publish_video(
-        self, video_path: str, title: str, desc: str, tags: list[str]
+        self, video_path: Path, title: str, desc: str, tags: list[str]
     ) -> Optional[str]:
         """
         Uploads the video file and inserts the video resource into YouTube.
         """
-        if not os.path.exists(video_path):
+        if not video_path.is_file():
             raise OSError(f"File not found: {video_path}")
 
         body = {
@@ -65,7 +66,7 @@ class YouTubeApiBridge(PlatformApiBridge):
         }
 
         media = MediaFileUpload(
-            filename=video_path,
+            filename=video_path.resolve(),
             chunksize=-1,  # -1 means chunking is managed automatically
             resumable=True,
             mimetype="video/*",
