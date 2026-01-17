@@ -8,8 +8,8 @@ Built with modern Python tools like Poetry, Ruff, Pytest to ensure stability, pe
 ## Features Overview
 
 - **Automated Generation** — AI video generation based off keywords, analysis of keywords creating most engagement.
-- **Scheduled Publishing** — Publish seamlessly to platforms YouTube, Tiktok, Instagram via APIs.
-- **Real-Time Analytics** — Pull engagement data (views, likes, comments) right after publication.
+- **Scheduled Publishing** — Publish seamlessly to platforms YouTube, (TODO Tiktok, Instagram) via APIs.
+- **Real-Time Analytics** — Pull engagement data (views, likes, comments) of published views and analyse to generate videos similar to best performers.
 - **Quality Assurance** — Enforce clean, type-safe code with Ruff and Mypy integration.
 
 ---
@@ -55,10 +55,8 @@ Create a `.env` file in the project root based on `.env.example` (`.env` already
 Example `.env`:
 
 ```bash
-SORA_API_KEY=<sora-api-key>
-YOUTUBE_API_KEY=<youtube-api-key>
-TIKTOK_API_KEY=<tiktok-api-key>
-INSTAGRAM_API_KEY=<instagram-api-key>
+GEMINI_API_KEY=<gemini-api-key>
+YOUTUBE_CLIENT_SECRETS_FILE=<youtube-api-client-json>
 ```
 
 ### 4. Run the Application
@@ -66,7 +64,7 @@ INSTAGRAM_API_KEY=<instagram-api-key>
 Run the project’s main entry point within Poetry’s environment:
 
 ```bash
-poetry run python video_generation_analysis/main.py
+poetry run python video_generation_analysis/main.py --prompt "initial video generation prompt"
 ```
 
 ### 5. Development Commands
@@ -84,4 +82,9 @@ poetry run python video_generation_analysis/main.py
 `poetry build`
 
 **Generate documentation:**
-`poetry run sphinx-build -b html source _build`
+`poetry run sphinx-apidoc -f -o docs/source/api ./video_generation_analysis ./tests/* --separate --module-first`
+`poetry run sphinx-build -E -b html docs/source docs/_build`
+
+**Pre-commit hooks install:**
+`poetry add --group dev pre-commit`
+`poetry run pre-commit install`
