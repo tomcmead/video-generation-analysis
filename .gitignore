@@ -1,5 +1,6 @@
 .venv
 .env
+client_secret.json
 dist/
 build/
 .vscode/
@@ -12,3 +13,4 @@ docs/_build/
 docs/source/_static/
 docs/source/_templates/
 docs/source/_autosummary/
+docs/source/api/
