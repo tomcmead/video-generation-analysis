@@ -11,7 +11,7 @@ Built with modern Python tools like Poetry, Ruff, Pytest to ensure stability, pe
 Features Overview
 =================
 
-- **Automated Generation:** AI video generation based off keywords, analysis of keywords creating most engagement.
-- **Scheduled Publishing:** Publish seamlessly to platforms YouTube, Tiktok, Instagram via APIs.
-- **Real-Time Analytics:** Pull engagement data (views, likes, comments) after publication.
-- **Quality Assurance:** Integrates with Ruff for linting and Mypy for static type checking.
+- **Automated Generation** — AI video generation based off keywords, analysis of keywords creating most engagement.
+- **Scheduled Publishing** — Publish seamlessly to platforms YouTube, (TODO Tiktok, Instagram) via APIs.
+- **Real-Time Analytics** — Pull engagement data (views, likes, comments) of published views and analyse to generate videos similar to best performers.
+- **Quality Assurance** — Enforce clean, type-safe code with Ruff and Mypy integration.

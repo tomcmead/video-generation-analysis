@@ -56,12 +56,11 @@ Create a file named ``.env`` in the root of the project directory (it is ignored
 
 .. code-block:: bash
 
-   # YouTube API key for publishing
-   YOUTUBE_API_KEY=your_youtube_key_here
+   # Gemini API key for AI video generation
+   GEMINI_API_KEY=your_gemini_api_key
 
-   # Service key for analysis platform
-   ANALYSIS_SERVICE_SECRET=your_secret_key_here
-
+   # YouTube API client secrets for publishing and engagement analytics
+   YOUTUBE_CLIENT_SECRETS_FILE=client_secret.json
 ----
 
 4. Run Application
@@ -71,7 +70,7 @@ Execute the project’s main entry point within Poetry’s virtual environment.
 
 .. code-block:: bash
 
-   poetry run python video_generation_analysis/main.py
+   poetry run python video_generation_analysis/main.py --prompt "initial video generation prompt"
 
 ----
 
@@ -106,4 +105,12 @@ Build documentation:
 
 .. code-block:: bash
 
-   poetry run sphinx-build -b html source _build
+   poetry run sphinx-apidoc -f -o docs/source/api ./video_generation_analysis ./tests/* --separate --module-first
+   poetry run sphinx-build -E -b html docs/source docs/_build
+
+Install pre-commit hooks to enforce code quality before each commit:
+
+.. code-block:: bash
+
+   poetry add --group dev pre-commit
+   poetry run pre-commit install

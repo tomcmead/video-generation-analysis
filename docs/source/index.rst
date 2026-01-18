@@ -44,12 +44,40 @@ Auto-Generated Module Documentation
      </p>
    </div>
 
+.. raw:: html
+
+   <div class="api-reference-container" style="
+       border: 1px solid #e1e4e8;
+       border-radius: 6px;
+       padding: 20px;
+       background-color: #ffffff;
+       margin-top: 20px;
+   ">
+     <div style="
+         display: inline-block;
+         padding: 4px 12px;
+         background-color: #2b6cb0;
+         color: white;
+         border-radius: 20px;
+         font-size: 0.85em;
+         font-weight: bold;
+         margin-bottom: 15px;
+         text-transform: uppercase;
+         letter-spacing: 0.05em;
+     ">
+       Core Package Entry
+     </div>
+
 .. autosummary::
    :toctree: _autosummary
    :recursive:
    :caption: Python API Reference
 
    video_generation_analysis
+
+.. raw:: html
+
+   </div>
 
 ----
 
