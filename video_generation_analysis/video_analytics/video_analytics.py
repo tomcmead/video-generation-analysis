@@ -7,7 +7,7 @@ from video_generation_analysis.video_generator.description_generator import (
     DescriptionGenerator,
 )
 from video_generation_analysis.video_generator.video_generator import VideoGenerator
-from video_generation_analysis.video_platforms_handler.video_publisher import (
+from video_generation_analysis.video_platforms_handler.video_platforms_handler import (
     VideoPlatformsFacade,
 )
 from video_generation_analysis.video_platforms_handler.youtube_api_bridge import (
