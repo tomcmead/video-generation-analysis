@@ -1,4 +1,3 @@
-import os
 import unittest
 from datetime import datetime
 from pathlib import Path
@@ -16,7 +15,7 @@ from video_generation_analysis.video_platforms_handler.video_platforms_handler i
 
 
 class TestVideoAnalytis(unittest.TestCase):
-    DB_PATH = "test_db.sqlite"
+    DB_PATH = Path("test_db.sqlite")
     TABLE_NAME = VideoEngagementRecord.__name__.lower() + "s"
     TEST_DATETIME = datetime(2025, 11, 25, 12, 0, 0)
     TEST_VIDEO_FILE = Path("test_video.mp4")
@@ -51,11 +50,11 @@ class TestVideoAnalytis(unittest.TestCase):
 
     def setUp(self):
         self.tearDown()
-        self._db_handler = DatabaseHandler(self.DB_PATH, VideoEngagementRecord)
+        self._db_handler = DatabaseHandler(Path(self.DB_PATH), VideoEngagementRecord)
 
     def tearDown(self):
-        if os.path.exists(self.DB_PATH):
-            os.remove(self.DB_PATH)
+        if self.DB_PATH.exists():
+            self.DB_PATH.unlink()
         if self.TEST_VIDEO_FILE.exists():
             self.TEST_VIDEO_FILE.unlink()
 

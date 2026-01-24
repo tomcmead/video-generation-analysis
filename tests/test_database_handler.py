@@ -1,7 +1,7 @@
-import os
 import sqlite3
 import unittest
 from datetime import datetime
+from pathlib import Path
 
 from video_generation_analysis.database_handler.database_handler import DatabaseHandler
 from video_generation_analysis.database_handler.query_builder import (
@@ -12,7 +12,7 @@ from video_generation_analysis.database_handler.schema import VideoEngagementRec
 
 
 class TestDatabaseHandler(unittest.TestCase):
-    DB_PATH = "test_temp_db.sqlite"
+    DB_PATH = Path("test_temp_db.sqlite")
     TABLE_NAME = VideoEngagementRecord.__name__.lower() + "s"
     TEST_DATETIME = datetime(2025, 11, 25, 12, 0, 0)
 
@@ -53,11 +53,11 @@ class TestDatabaseHandler(unittest.TestCase):
         self.handler = DatabaseHandler(self.DB_PATH, VideoEngagementRecord)
 
     def tearDown(self):
-        if os.path.exists(self.DB_PATH):
-            os.remove(self.DB_PATH)
+        if self.DB_PATH.exists():
+            self.DB_PATH.unlink()
 
     def _get_raw_connection(self):
-        return sqlite3.connect(self.DB_PATH)
+        return sqlite3.connect(str(self.DB_PATH))
 
     def test_context_manager_connects_and_closes(self):
         self.assertIsNone(self.handler._conn)

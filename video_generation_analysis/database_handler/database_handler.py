@@ -3,6 +3,7 @@ import logging
 import sqlite3
 from dataclasses import fields, is_dataclass
 from datetime import datetime
+from pathlib import Path
 from typing import Any, Dict, Optional, Type, get_origin
 
 from video_generation_analysis.database_handler.query_builder import (
@@ -15,9 +16,9 @@ from video_generation_analysis.database_handler.schema import SQLITE_TYPE_MAP
 class DatabaseHandler:
     """Context Manager handles all database operations for a specific SQLite file."""
 
-    def __init__(self, db_path: str, db_schema: Type) -> None:
+    def __init__(self, db_path: Path, db_schema: Type) -> None:
         self._logger: logging.Logger = logging.getLogger(__name__)
-        self._db_path: str = db_path
+        self._db_path: Path = db_path
         self._db_schema: Type = db_schema
         self._table_name: str = ""
         self._conn: Optional[sqlite3.Connection] = None
@@ -25,7 +26,7 @@ class DatabaseHandler:
 
     def __enter__(self) -> "DatabaseHandler":
         """Context Manager establish db connection & cursor entering 'with' block."""
-        self._conn = sqlite3.connect(self._db_path)
+        self._conn = sqlite3.connect(str(self._db_path))
         self._conn.row_factory = sqlite3.Row
         self._cursor = self._conn.cursor()
         self._create_table(self._db_schema)
