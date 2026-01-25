@@ -2,6 +2,11 @@ from datetime import datetime
 
 from video_generation_analysis.config import NUM_KEYWORDS
 from video_generation_analysis.database_handler.database_handler import DatabaseHandler
+from video_generation_analysis.database_handler.query_builder import (
+    OrderByType,
+    QueryBuilder,
+    WhereComparison,
+)
 from video_generation_analysis.database_handler.schema import VideoEngagementRecord
 from video_generation_analysis.video_generator.description_generator import (
     DescriptionGenerator,
@@ -66,3 +71,29 @@ class VideoAnalytics:
 
         with self._database_handler as db:
             db.create(video_record)
+
+    def update_video_metrics(self, top_n_records: int = None) -> None:
+        """Update engagement metrics of all published videos in database"""
+        with self._database_handler as db:
+            qb = (
+                QueryBuilder()
+                .select_columns(["id", "urls"])
+                .where_compare("views", WhereComparison.GREATER_THAN, 0)
+                .order_by("views", OrderByType.DESCENDING)
+            )
+            if top_n_records:
+                qb.limit(top_n_records)
+            records = db.read(qb)  # views > 0
+
+            for record in records:
+                engagement = self._video_platforms.get_engagement_metrics_all(
+                    video_url=record.urls
+                )
+                db.update(
+                    record.id,
+                    {
+                        "views": engagement.views,
+                        "likes": engagement.likes,
+                        "comments": engagement.comments,
+                    },
+                )
