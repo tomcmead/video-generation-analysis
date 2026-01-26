@@ -5,6 +5,7 @@ from unittest.mock import patch
 
 from video_generation_analysis.database_handler.database_handler import DatabaseHandler
 from video_generation_analysis.database_handler.query_builder import (
+    OrderByType,
     QueryBuilder,
 )
 from video_generation_analysis.database_handler.schema import VideoEngagementRecord
@@ -106,6 +107,54 @@ class TestVideoAnalytis(unittest.TestCase):
                 assert int(record.likes) == 0
                 assert int(record.comments) == 0
 
+    @patch(
+        "video_generation_analysis.video_generator.video_generator.VideoGenerator",
+    )
+    @patch(
+        "video_generation_analysis.video_platforms_handler.video_platforms_handler.VideoPlatformsFacade",
+    )
+    @patch(
+        "video_generation_analysis.video_generator.description_generator.DescriptionGenerator",
+    )
+    def test_update_video_metrics(
+        self, mock_description_generator, mock_platforms, mock_video_generator
+    ):
+        (
+            mock_desc_inst,
+            mock_platforms_inst,
+            mock_video_gen_inst,
+        ) = self._setup_mocks_generate_video(
+            description=mock_description_generator,
+            platforms=mock_platforms,
+            video_generator=mock_video_generator,
+        )
+        video_analytics = VideoAnalytics(
+            db_handler=self._db_handler,
+            description_generator=mock_desc_inst,
+            video_generator=mock_video_gen_inst,
+            video_platforms=mock_platforms_inst,
+        )
+        self._setup_test_video_database()
+
+        video_analytics.update_video_metrics(top_n_records=2)
+
+        with self._db_handler as db:
+            qb = (
+                QueryBuilder()
+                .select_columns("*")
+                .order_by("views", OrderByType.DESCENDING)
+            )
+            records = db.read(qb)
+
+            for record, test_record in zip(records, self.TEST_RECORDS):
+                assert record.title == test_record.title
+                assert record.description == test_record.description
+                assert record.keywords == test_record.keywords
+                assert record.urls == test_record.urls
+                assert int(record.views) == self.UPDATED_VIDEO_ENGAGEMENT.views
+                assert int(record.likes) == self.UPDATED_VIDEO_ENGAGEMENT.likes
+                assert int(record.comments) == self.UPDATED_VIDEO_ENGAGEMENT.comments
+
     def _setup_mocks_generate_video(self, **mocks):
         mock_description = mocks["description"].return_value
         mock_platforms = mocks["platforms"].return_value
@@ -123,3 +172,8 @@ class TestVideoAnalytis(unittest.TestCase):
         mock_video_generator.create_video.return_value = self.TEST_VIDEO_FILE
 
         return mock_description, mock_platforms, mock_video_generator
+
+    def _setup_test_video_database(self):
+        with self._db_handler as db:
+            for record in self.TEST_RECORDS:
+                db.create(record)
